@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Camping And Trails</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css'
+        type='text/css' / <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+    <!-- MY custom styles -->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css'
+        type='text/css' />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div id="menu">
+      
+        <div id='changebasemap' class='pl-2'>
+            <div class="custom-control mt-2 custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="mystyle" name="inlineDefaultRadios">
+                <label class="custom-control-label" for="mystyle">Streets</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="satellite-streets" name="inlineDefaultRadios">
+                <label class="custom-control-label" for="satellite-streets">Sat</label>
+            </div>
+        </div>
+        <select id='setminzoom' class="browser-default custom-select">
+            <option selected value='15'>Camp Min Zoom</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+        </select>
+
+    </div>    
+
+    <div id='map'></div>
+    <pre id='features'></pre>
+    <div class='calculation-box pt-1'>
+        <div id='calculated-area'></div>
+    </div>
+    <div id="sidepanel">
+        <p class='h4 text-center'>Campgrounds</p>
+        <div class="md-form mx-5">
+            <input type="text" id="campsearch" class="form-control">
+            <label for="campsearch">Search For Campground</label>
+            <ul class='list-group' id='result'></ul>
+            <h4 class='mt-5' id='pleasesearch'>Please Search or Click on Camp</h4>
+        </div>
+
+        <div class='invisible' id='sidepanelresults'>
+            
+        </div>
+    </div>
+
+    <button class="btn grey m-1 p-2 showpanelbtn"><i class="fa fa-arrow-left"></i></button>
+    <button class="btn blue-gradient m-1 p-2 hidepanelbtn"><i class="fa fa-arrow-right"></i></button>
+
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script> -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        crossorigin="anonymous"></script>
+    <script src='js/script.js'></script>
+</body>
+
+</html>
