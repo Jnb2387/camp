@@ -12,10 +12,7 @@ var map = new mapboxgl.Map({
 });
 
 var ajaxresult;
-$.getJSON("/allcamps.json", function (data) {
-    ajaxresult = data;
-    console.log("Camps Ajax'd");
-});
+
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl());
 var Draw = new MapboxDraw({
@@ -55,6 +52,7 @@ $(".hidepanelbtn").click(function (e) {
     $('.hidepanelbtn').hide();
     map.resize();
 });
+
 map.on("style.load", function () {
     var layers = map.getStyle().layers;
     // Find the index of the first symbol layer in the map style
@@ -65,6 +63,94 @@ map.on("style.load", function () {
             break;
         }
     }
+    $.getJSON("/allcamps_5.json", function (data) {
+        ajaxresult = data;
+        console.log("Camps Ajax'd", ajaxresult);
+        
+        map.addSource("allcamps", {
+            type: "geojson",
+            data: ajaxresult//"/allcamps.json",
+        });
+        map.addLayer({
+            id: "allcamps",
+            type: "circle",
+            source: "allcamps",
+            // "source-layer": "allcamps",
+            minzoom: 4,
+            maxzoom: 22,
+            layout: {
+                visibility: "visible"
+            },
+            paint: {
+                "circle-color": "blue",
+                "circle-radius": {
+                    base: 1.75,
+                    stops: [
+                        [7, 1],
+                        [14, 3],
+                        [22, 19]
+                    ]
+                }
+            }
+        }, firstSymbolId);
+        map.addLayer({
+            id: "allcampslabels",
+            type: "symbol",
+            source: "allcamps",
+            // "source-layer": "allcamps",
+            minzoom: 9,
+            maxzoom: 22,
+            layout: {
+                visibility: "visible",
+                "text-field": "{name}",
+                "text-font": ["Roboto Black"],
+                "text-size": {
+                    base: 1.75,
+                    stops: [
+                        [8, 8],
+                        [14, 14]
+                    ]
+                },
+                "text-transform": "uppercase",
+                // "text-ignore-placement":true,
+                // "text-allow-overlap":true
+            },
+            paint: {
+                "text-color": "blue",
+                "text-halo-color": "#fff",
+                "text-halo-width": 2
+            }
+        });
+    
+        map.addLayer({
+            id: "allcampslabels_highlight",
+            type: "symbol",
+            source: "allcamps",
+            // "source-layer": "allcamps",
+            minzoom: 4,
+            maxzoom: 22,
+            layout: {
+                visibility: "visible",
+                "text-field": "{name}",
+                "text-font": ["Roboto Black"],
+                "text-size": {
+                    base: 1.75,
+                    stops: [
+                        [8, 12],
+                        [14, 18]
+                    ]
+                },
+                "text-transform": "uppercase",
+            },
+            paint: {
+                "text-color": "blue",
+                "text-halo-color": "yellow",
+                "text-halo-width": 3
+            },
+            filter: ["==", "id", ""]
+        });
+    });
+    
     // map.addSource("allcamps", {
     //     type: "vector",
     //     tiles: [
@@ -73,108 +159,24 @@ map.on("style.load", function () {
     //     minzoom: 0,
     //     maxzoom: 6
     // });
-    map.addSource("allcamps", {
-        type: "geojson",
-        data: "/allcamps.json",
-    });
+    
     map.addSource("alltrails", {
         type: "vector",
         tiles: [
             "http://www.jeffreybradley.a2hosted.com:49500/alltrails/{z}/{x}/{y}.pbf"
         ],
-        minzoom: 0,
+        minzoom: 7,
         maxzoom: 13
     });
 
-    map.addLayer({
-        id: "allcamps",
-        type: "circle",
-        source: "allcamps",
-        // "source-layer": "allcamps",
-        minzoom: 4,
-        maxzoom: 22,
-        layout: {
-            visibility: "visible"
-        },
-        paint: {
-            "circle-color": "blue",
-            "circle-radius": {
-                base: 1.75,
-                stops: [
-                    [7, 1],
-                    [14, 3],
-                    [22, 19]
-                ]
-            }
-        }
-    }, firstSymbolId);
-    map.addLayer({
-        id: "allcampslabels",
-        type: "symbol",
-        source: "allcamps",
-        // "source-layer": "allcamps",
-        minzoom: 9,
-        maxzoom: 22,
-        layout: {
-            visibility: "visible",
-            "text-field": "{name}",
-            "text-font": ["Roboto Black"],
-            "text-size": {
-                base: 1.75,
-                stops: [
-                    [8, 8],
-                    [14, 14]
-                ]
-            },
-            "text-transform": "uppercase",
-            // "text-ignore-placement":true,
-            // "text-allow-overlap":true
-            // "text-padding": 100
-        },
-        paint: {
-            "text-color": "blue",
-            "text-halo-color": "#fff",
-            "text-halo-width": 2
-        }
-    },firstSymbolId);
-
-    map.addLayer({
-        id: "allcampslabels_highlight",
-        type: "symbol",
-        source: "allcamps",
-        // "source-layer": "allcamps",
-        minzoom: 4,
-        maxzoom: 22,
-        layout: {
-            visibility: "visible",
-            "text-field": "{name}",
-            "text-font": ["Roboto Black"],
-            "text-size": {
-                base: 1.75,
-                stops: [
-                    [8, 12],
-                    [14, 18]
-                ]
-            },
-            "text-transform": "uppercase",
-            "text-ignore-placement":true,
-            "text-allow-overlap":true
-            // "text-padding": 100
-        },
-        paint: {
-            "text-color": "blue",
-            "text-halo-color": "yellow",
-            "text-halo-width": 3
-        },
-        filter: ["in", "id", ""]
-    });
+  
 
     map.addLayer({
         id: "alltrails",
         type: "line",
         source: "alltrails",
         "source-layer": "alltrails",
-        minzoom: 6,
+        minzoom: 7,
         maxzoom: 22,
         layout: {
             visibility: "visible"
@@ -312,16 +314,14 @@ var campsearchbtn = $("#campsearch").on("keyup", function () {
         }
     });
     $("#result").on("click", "li", function (val) {
+        $("#sidepanelresults").removeClass("invisible");
+        $("#pleasesearch").addClass("d-none");
         var splitstring = $(this)[0].textContent.split(":");
         var coords = splitstring[1].split(",");
         var resultcampname = splitstring[0];
-        var resultcampid=splitstring[2];
-        console.log(resultcampid)
-        map.setFilter("allcampslabels_highlight", [
-            "in",
-            "id",
-            97359
-        ]);
+        var resultcampid=parseInt(splitstring[2]);
+        // console.log(typeof(resultcampid))
+        map.setFilter("allcampslabels_highlight", ["==",['number',['get',"id"]],resultcampid]);
         map.jumpTo({
             center: coords,
             zoom: 14
@@ -330,14 +330,19 @@ var campsearchbtn = $("#campsearch").on("keyup", function () {
         setTimeout(function () {
             var features = map.querySourceFeatures("allcamps", {
                 // sourceLayer: "allcamps",
-                filter: ["in", "id", 97359]
+                filter: ["in", "id", resultcampid]
             });
-            console.log(features)
+            $("#sidepanelresults").html(features[0].properties.description)
+            // console.log(features)
         }, 1000);
         $("#campsearch").val(resultcampname);
     });
 });
-map.on('mousemove', function (e) {
+map.on('click','allcampslabels', function (e) {
     var features = map.queryRenderedFeatures(e.point);
-    document.getElementById('features').innerHTML = JSON.stringify(features, null, 2);
+    $("#sidepanelresults").removeClass("invisible");
+    $("#pleasesearch").addClass("d-none");
+    $("#sidepanelresults").html(features[0].properties.description)
+    map.setFilter("allcampslabels_highlight", ["==",['number',['get',"id"]],features[0].properties.id]);
+
 });
